@@ -6,6 +6,7 @@ from Drum_system import App
 import imutils
 from Include.Stick import Stick
 from Include.Drums import Drums
+from music21 import converter, corpus, instrument, midi, note, chord, pitch
 
 # pygame init
 pygame.mixer.pre_init()
@@ -20,5 +21,8 @@ hihat = pygame.mixer.Sound("venv/Sounds/hihat.wav")
 
 
 if __name__ == "__main__":
-    app = App.App()
-    app.run()
+    #app = App.App()
+    #app.run()
+
+
+
