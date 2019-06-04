@@ -2,16 +2,9 @@
 import numpy as np
 import imutils
 import cv2
-from Drum_system import Tools
+from Drum_system import Tools,Visualization
 import pygame
-
-# define the lower and upper boundaries of the colors in the HSV color space
-#lower = {'red': (166, 84, 141), 'blue': (97, 100, 117)}  # assign new item lower['blue'] = (93, 10, 0)
-#upper = {'red': (186, 255, 255), 'blue': (117, 255, 255)}
-
-# define standard colors for circle around the object
-#colors = {'red': (0, 0, 255), 'blue': (255, 0, 0)}
-
+import time
 
 class App:
 
@@ -34,18 +27,40 @@ class App:
         self.hihat = pygame.mixer.Sound("venv/Sounds/hihat.wav")
 
     def run(self):
-
+        vs = Visualization.Visualization()
+        tabs = vs.get_tabs()
         camera = cv2.VideoCapture(0)
+        start = time.time()
+        nb = []
+        offsets_done = []
 
         while True:
             # grab the current frame and flip it
             ret, frame = camera.read()
+            finish = time.time()
+            frame_time = round((finish - start),1)
+
             frame = cv2.flip(frame, 1)
 
             # resize the frame
             frame = imutils.resize(frame, width=640, height=480)
 
             self.drums.draw_drum_areas(frame)
+
+            last_time = 0
+            if frame_time in tabs.keys():
+                if frame_time in offsets_done:
+                    pass
+                else:
+                    offsets_done.append(frame_time)
+                    nb.append(Visualization.note_box(tabs.get(frame_time)))
+
+            if nb:
+                for item in nb:
+                    item.show(frame)
+                    if item.get_done():
+                        nb.remove(item)
+
             self.process_frame(frame)
 
 
@@ -105,7 +120,6 @@ class App:
 
     def recognize_ball(self, ball_center, drum_stick):
         volume = drum_stick.determine_volume()
-        print(volume)
         if 80 <= ball_center[0] <= 230 and 110 <= ball_center[1] <= 210:
             if not drum_stick.hi_hat_hit:
                 #volume = drum_stick.determine_volume()
