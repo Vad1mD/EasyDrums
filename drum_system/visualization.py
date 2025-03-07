@@ -1,17 +1,17 @@
 import cv2 as cv
-from Drum_system import midi_extractor
-import random
+from drum_system import midi_extractor
+import os
 
 class Visualization:
 
     def __init__(self):
-        self.midi_path = "C:/Users/dolva/PycharmProjects/EasyDrums/venv/MIDI/SevenNationArmy.mid"
+        root_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        self.midi_path = os.path.join(root_dir, "data/midi")
         self.midi = midi_extractor.Midi_extractor()
         self.tabs = self.midi.get_tabs(self.midi_path)
 
     def get_tabs(self):
         return self.tabs
-
 
 
 class note_box:

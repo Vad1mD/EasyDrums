@@ -2,7 +2,7 @@
 import numpy as np
 import imutils
 import cv2
-from Drum_system import Tools,visualization
+from drum_system import tools,visualization
 import pygame
 import time
 
@@ -10,11 +10,11 @@ class App:
 
     def __init__(self):
 
-        self.red_stick = Tools.Stick('red')
-        self.blue_stick = Tools.Stick('blue')
+        self.red_stick = tools.Stick('red')
+        self.blue_stick = tools.Stick('blue')
         self.sticks = [self.red_stick, self.blue_stick]
 
-        self.drums = Tools.Drums()
+        self.drums = tools.Drums()
 
         pygame.mixer.pre_init()
         pygame.mixer.init(frequency=22050, size=-16, channels=2, buffer=4096)
