@@ -26,11 +26,8 @@ EasyDrums is a project developed as a college graduation project. It is a system
 
 ## Usage
 
-1. Import the necessary classes from the `Tools.py` file:
-    ```python
-    from Drum_system.Tools import Stick, Drums
-    ```
-2. Create instances of the `Stick` and `Drums` classes and use their methods as needed.
+1. A red and a blue balls, preferably on a drum sticks are required, as well as proper lighting.
+2. Run main.py
 
 ## Acknowledgments
 
