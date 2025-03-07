@@ -1,5 +1,6 @@
 from music21 import midi, note, chord
 
+
 class MidiExtractor:
     def __init__(self):
         self.mf = midi.MidiFile()

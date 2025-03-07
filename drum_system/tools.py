@@ -2,6 +2,7 @@ import numpy as np
 import math
 import cv2 as cv
 
+
 class Stick:
     """Class representing a drum stick with color detection and velocity calculation."""
 
@@ -13,10 +14,10 @@ class Stick:
     def __init__(self, color: str):
         """Initialize the Stick with a specific color."""
         self.color = color
-        if color == 'red':
+        if color == "red":
             self.hsv = self.RED_HSV
             self.rgb = self.RED_RGB
-        elif color == 'blue':
+        elif color == "blue":
             self.hsv = self.BLUE_HSV
             self.rgb = self.BLUE_RGB
         else:
@@ -34,7 +35,9 @@ class Stick:
     def calculate_velocity(self) -> None:
         """Calculate the velocity of the stick based on its last 5 positions."""
         x = (self.last_5_centers[4][0] - self.last_5_centers[2][0]) ** 2
-        y = (self.last_5_centers[4][1] - self.last_5_centers[2][1]) ** 2  # Fixed y component calculation
+        y = (
+            self.last_5_centers[4][1] - self.last_5_centers[2][1]
+        ) ** 2  # Fixed y component calculation
         self.velocity = round(math.sqrt(x + y))
 
     def update_centers(self, center: tuple) -> None:

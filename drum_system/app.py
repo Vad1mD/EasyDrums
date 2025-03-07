@@ -6,10 +6,11 @@ from drum_system import tools, visualization
 import pygame
 import time
 
+
 class App:
     def __init__(self):
-        self.red_stick = tools.Stick('red')
-        self.blue_stick = tools.Stick('blue')
+        self.red_stick = tools.Stick("red")
+        self.blue_stick = tools.Stick("blue")
         self.sticks = [self.red_stick, self.blue_stick]
         self.drums = tools.Drums()
 
@@ -69,7 +70,9 @@ class App:
             mask = cv2.morphologyEx(mask, cv2.MORPH_OPEN, kernel)
             mask = cv2.morphologyEx(mask, cv2.MORPH_CLOSE, kernel)
 
-            cnts = cv2.findContours(mask.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)[-2]
+            cnts = cv2.findContours(
+                mask.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE
+            )[-2]
             center = None
 
             if len(cnts) > 0:
@@ -82,7 +85,9 @@ class App:
                 stick.calculate_velocity()
                 if radius > 0.5:
                     self.recognize_ball(center, stick)
-                    cv2.circle(single_frame, (int(x), int(y)), int(radius), stick.rgb, 2)
+                    cv2.circle(
+                        single_frame, (int(x), int(y)), int(radius), stick.rgb, 2
+                    )
 
     def recognize_ball(self, ball_center: tuple, drum_stick: tools.Stick) -> None:
         """Recognize the ball and play the corresponding drum sound."""
@@ -118,4 +123,3 @@ class App:
                 drum_stick.snare_hit = True
         else:
             drum_stick.snare_hit = False
-
