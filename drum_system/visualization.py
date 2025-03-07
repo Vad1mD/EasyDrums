@@ -1,12 +1,12 @@
 import cv2 as cv
-from Drum_system import Midi_extractor
+from Drum_system import midi_extractor
 import random
 
 class Visualization:
 
     def __init__(self):
         self.midi_path = "C:/Users/dolva/PycharmProjects/EasyDrums/venv/MIDI/SevenNationArmy.mid"
-        self.midi = Midi_extractor.Midi_extractor()
+        self.midi = midi_extractor.Midi_extractor()
         self.tabs = self.midi.get_tabs(self.midi_path)
 
     def get_tabs(self):

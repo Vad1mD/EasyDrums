@@ -2,7 +2,7 @@
 import numpy as np
 import imutils
 import cv2
-from Drum_system import Tools,Visualization
+from Drum_system import Tools,visualization
 import pygame
 import time
 
@@ -27,7 +27,7 @@ class App:
         self.hihat = pygame.mixer.Sound("venv/Sounds/hihat.wav")
 
     def run(self):
-        vs = Visualization.Visualization()
+        vs = visualization.Visualization()
         tabs = vs.get_tabs()
         camera = cv2.VideoCapture(0)
         start = time.time()
@@ -53,7 +53,7 @@ class App:
                     pass
                 else:
                     offsets_done.append(frame_time)
-                    nb.append(Visualization.note_box(tabs.get(frame_time)))
+                    nb.append(visualization.note_box(tabs.get(frame_time)))
 
             if nb:
                 for item in nb:

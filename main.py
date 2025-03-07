@@ -2,7 +2,7 @@
 import cv2
 import numpy as np
 import pygame
-from Drum_system import App,Midi_extractor,Visualization
+from Drum_system import App,midi_extractor,visualization
 import imutils
 from music21 import converter, corpus, instrument, midi, note, chord, pitch
 
