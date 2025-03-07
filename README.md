@@ -13,7 +13,7 @@ EasyDrums is a project developed as a college graduation project. It is a system
 
 1. Clone the repository:
     ```sh
-    git clone https://github.com/yourusername/EasyDrums.git
+    git clone https://github.com/Vad1mD/EasyDrums.git
     ```
 2. Navigate to the project directory:
     ```sh
