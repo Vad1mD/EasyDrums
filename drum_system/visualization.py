@@ -5,7 +5,7 @@ import os
 class Visualization:
     def __init__(self):
         root_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-        self.midi_path = os.path.join(root_dir, "data/midi")
+        self.midi_path = os.path.join(root_dir, "data/midi/SevenNationArmy.mid")
         self.midi = midi_extractor.MidiExtractor()
         self.tabs = self.midi.get_tabs(self.midi_path)
 
@@ -20,7 +20,7 @@ class NoteBox:
         self.notes = [38, 42, 47, 48]
         self.curr_note = curr_note
 
-    def show(self, frame: np.ndarray) -> None:
+    def show(self, frame) -> None:
         """Show the note box on the given frame."""
         if self.delta < 380:
             for note in self.curr_note:

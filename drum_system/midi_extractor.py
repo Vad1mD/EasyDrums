@@ -23,7 +23,7 @@ class MidiExtractor:
 
         return notes_dict
 
-    def get_tracks(self, midi_file: midi.MidiFile) -> list:
+    def get_tracks(self, midi_file) -> list:
         """Extract tracks with drums in them."""
         tracks_with_drums = []
         for track in midi_file.tracks:
@@ -31,7 +31,7 @@ class MidiExtractor:
                 tracks_with_drums.append(track)
         return tracks_with_drums
 
-    def extract_offset(self, midi_part: midi.MidiPart) -> list:
+    def extract_offset(self, midi_part) -> list:
         """Extract offsets of notes and chords."""
         parent_element = []
         offsets = []

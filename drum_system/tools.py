@@ -54,7 +54,7 @@ class Drums:
     def __init__(self):
         pass
 
-    def draw_drum_areas(self, mat: np.ndarray) -> None:
+    def draw_drum_areas(self, mat) -> None:
         """Draw the drum areas on the given matrix."""
         cv.rectangle(mat, (50, 350), (200, 450), (88, 138, 122), 1)
         cv.rectangle(mat, (430, 350), (580, 450), (185, 122, 53), 1)

@@ -16,10 +16,10 @@ class App:
         pygame.mixer.pre_init()
         pygame.mixer.init(frequency=22050, size=-16, channels=2, buffer=4096)
 
-        self.snare = pygame.mixer.Sound("venv/Sounds/snare.wav")
-        self.tom1 = pygame.mixer.Sound("venv/Sounds/tom1.wav")
-        self.tom2 = pygame.mixer.Sound("venv/Sounds/tom2.wav")
-        self.hihat = pygame.mixer.Sound("venv/Sounds/hihat.wav")
+        self.snare = pygame.mixer.Sound("data/audio/snare.wav")
+        self.tom1 = pygame.mixer.Sound("data/audio/tom1.wav")
+        self.tom2 = pygame.mixer.Sound("data/audio/tom2.wav")
+        self.hihat = pygame.mixer.Sound("data/audio/hihat.wav")
 
     def run(self) -> None:
         """Run the main application loop."""
@@ -58,7 +58,7 @@ class App:
         camera.release()
         cv2.destroyAllWindows()
 
-    def process_frame(self, single_frame: np.ndarray) -> None:
+    def process_frame(self, single_frame) -> None:
         """Process a single frame to detect drum sticks."""
         blurred = cv2.GaussianBlur(single_frame, (11, 11), 0)
         hsv = cv2.cvtColor(blurred, cv2.COLOR_BGR2HSV)
