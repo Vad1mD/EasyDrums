@@ -1,109 +1,80 @@
 from music21 import midi, note, chord
 
-
-class Midi_extractor:
-
+class MidiExtractor:
     def __init__(self):
-        self.mf=midi.MidiFile()
+        self.mf = midi.MidiFile()
+        self.midi_notes = [42.0, 38.0, 47.0, 48.0]
 
-
-    def get_tabs(self, path):
-        midi_path= path
-
+    def get_tabs(self, path: str) -> dict:
         # Read midi file
-        self.mf.open(midi_path)
+        self.mf.open(path)
         self.mf.read()
         self.mf.close()
 
-        self.midi_notes = [42.0,38.0,47.0,48.0]
-
-        m21_Stream = midi.translate.midiTracksToStreams(self.get_tracks(self.mf))
+        m21_stream = midi.translate.midiTracksToStreams(self.get_tracks(self.mf))
 
         # Extracting drum notes
-        notes_offset = list(self.extract_offset(m21_Stream))
+        notes_offset = list(self.extract_offset(m21_stream))
 
-        # Extracting notes that are relevent to current drum set
+        # Extracting notes that are relevant to current drum set
         existing_notes = self.get_existing_notes(notes_offset)
 
-        dict = self.list_to_dict(existing_notes)
+        notes_dict = self.list_to_dict(existing_notes)
 
-        return dict
+        return notes_dict
 
-
-    # Extracting the tracks with drums in them
-    def get_tracks(self,midi_file):
-
+    def get_tracks(self, midi_file: midi.MidiFile) -> list:
+        """Extract tracks with drums in them."""
         tracks_with_drums = []
-
-        for track in self.mf.tracks:
-            channels_in_track = track.getChannels()
-            if 10 in channels_in_track:
+        for track in midi_file.tracks:
+            if 10 in track.getChannels():
                 tracks_with_drums.append(track)
-
         return tracks_with_drums
 
-
-    def extract_offset(self,midi_part):
-        parent_element=[]
-        offset = []
-        ret=[]
+    def extract_offset(self, midi_part: midi.MidiPart) -> list:
+        """Extract offsets of notes and chords."""
+        parent_element = []
+        offsets = []
         for nt in midi_part.flat.notes:
             if isinstance(nt, note.Note):
-                ret.append(max(0.0, nt.pitch.ps))
+                offsets.append((max(0.0, nt.pitch.ps), nt.offset))
                 parent_element.append(nt)
             elif isinstance(nt, chord.Chord):
                 for pitch in nt.pitches:
-                    ret.append(max(0.0, pitch.ps))
+                    offsets.append((max(0.0, pitch.ps), nt.offset))
                     parent_element.append(nt)
+        return offsets
 
-        x = [n.offset for n in parent_element]
+    def get_existing_notes(self, notes: list) -> list:
+        """Filter notes that are relevant to the current drum set."""
+        return [tab for tab in notes if tab[0] in self.midi_notes]
 
-        note_offset = zip(ret,x)
-
-        return note_offset
-
-
-    def get_existing_notes(self, notes):
-        l = []
-        for tab in notes:
-            if tab[0] in self.midi_notes:
-                l.append(tab)
-        return l
-
-
-    def list_to_dict(self, notes_list):
-
-        flag = False
-        dict = {}
+    def list_to_dict(self, notes_list: list) -> dict:
+        """Convert list of notes to a dictionary with time as keys."""
+        notes_dict = {}
         time_list = []
         last_entry = 0
         last_note = 0
+        flag = False
 
-        for note,time in notes_list:
-
-            # if encountered new time stamp
-            if flag == True:
+        for note, time in notes_list:
+            if flag:
                 time_list.append(last_note)
-                dict[last_entry] = None
+                notes_dict[last_entry] = None
                 flag = False
 
-            if time not in dict.keys() and len(time_list)==0:
+            if time not in notes_dict and not time_list:
                 time_list.append(note)
-                dict[time]=None
+                notes_dict[time] = None
                 last_entry = time
-
-            elif time not in dict.keys() and len(time_list)>0 :
-                dict[last_entry] = time_list.copy()
+            elif time not in notes_dict and time_list:
+                notes_dict[last_entry] = time_list.copy()
                 last_entry = time
                 last_note = note
                 flag = True
                 time_list.clear()
-
             else:
-                 time_list.append(note)
+                time_list.append(note)
 
-        # Adding last element
-        dict[last_entry] = time_list.copy()
-
-        return dict
-
+        notes_dict[last_entry] = time_list.copy()
+        return notes_dict
