@@ -1,12 +1,13 @@
+from typing import Dict, List, Tuple, Any
 from music21 import midi, note, chord
 
 
 class MidiExtractor:
-    def __init__(self):
-        self.mf = midi.MidiFile()
-        self.midi_notes = [42.0, 38.0, 47.0, 48.0]
+    def __init__(self) -> None:
+        self.mf: midi.MidiFile = midi.MidiFile()
+        self.midi_notes: List[float] = [42.0, 38.0, 47.0, 48.0]
 
-    def get_tabs(self, path: str) -> dict:
+    def get_tabs(self, path: str) -> Dict[Any, Any]:
         # Read midi file
         self.mf.open(path)
         self.mf.read()
@@ -24,7 +25,7 @@ class MidiExtractor:
 
         return notes_dict
 
-    def get_tracks(self, midi_file) -> list:
+    def get_tracks(self, midi_file: Any) -> List[Any]:
         """Extract tracks with drums in them."""
         tracks_with_drums = []
         for track in midi_file.tracks:
@@ -32,31 +33,28 @@ class MidiExtractor:
                 tracks_with_drums.append(track)
         return tracks_with_drums
 
-    def extract_offset(self, midi_part) -> list:
+    def extract_offset(self, midi_part: Any) -> List[Tuple[float, Any]]:
         """Extract offsets of notes and chords."""
-        parent_element = []
         offsets = []
         for nt in midi_part.flat.notes:
             if isinstance(nt, note.Note):
                 offsets.append((max(0.0, nt.pitch.ps), nt.offset))
-                parent_element.append(nt)
             elif isinstance(nt, chord.Chord):
                 for pitch in nt.pitches:
                     offsets.append((max(0.0, pitch.ps), nt.offset))
-                    parent_element.append(nt)
         return offsets
 
-    def get_existing_notes(self, notes: list) -> list:
+    def get_existing_notes(self, notes: List[Tuple[float, Any]]) -> List[Tuple[float, Any]]:
         """Filter notes that are relevant to the current drum set."""
         return [tab for tab in notes if tab[0] in self.midi_notes]
 
-    def list_to_dict(self, notes_list: list) -> dict:
+    def list_to_dict(self, notes_list: List[Tuple[float, Any]]) -> Dict[Any, Any]:
         """Convert list of notes to a dictionary with time as keys."""
-        notes_dict = {}
-        time_list = []
-        last_entry = 0
-        last_note = 0
-        flag = False
+        notes_dict: Dict[Any, Any] = {}
+        time_list: List[float] = []
+        last_entry: Any = 0
+        last_note: float = 0
+        flag: bool = False
 
         for note, time in notes_list:
             if flag:

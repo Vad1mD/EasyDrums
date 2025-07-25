@@ -1,16 +1,18 @@
+from typing import Dict, List, Any
 import cv2 as cv
 from drum_system import midi_extractor
 import os
+import numpy as np
 
 
 class Visualization:
-    def __init__(self):
-        root_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-        self.midi_path = os.path.join(root_dir, "data/midi/SevenNationArmy.mid")
-        self.midi = midi_extractor.MidiExtractor()
-        self.tabs = self.midi.get_tabs(self.midi_path)
+    def __init__(self) -> None:
+        root_dir: str = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        self.midi_path: str = os.path.join(root_dir, "data/midi/SevenNationArmy.mid")
+        self.midi: midi_extractor.MidiExtractor = midi_extractor.MidiExtractor()
+        self.tabs: Dict[Any, Any] = self.midi.get_tabs(self.midi_path)
 
-    def get_tabs(self) -> dict:
+    def get_tabs(self) -> Dict[Any, Any]:
         """Get the tabs from the MIDI extractor."""
         return self.tabs
 
@@ -57,3 +59,8 @@ class NoteBox:
     def get_done(self) -> bool:
         """Check if the note box is done."""
         return self.done
+
+
+def note_box(curr_note: List[float]) -> NoteBox:
+    """Factory function to create a NoteBox instance."""
+    return NoteBox(curr_note)
