@@ -1,4 +1,5 @@
 # import the necessary packages
+from typing import List, Tuple
 import numpy as np
 import imutils
 import cv2
@@ -8,19 +9,19 @@ import time
 
 
 class App:
-    def __init__(self):
-        self.red_stick = tools.Stick("red")
-        self.blue_stick = tools.Stick("blue")
-        self.sticks = [self.red_stick, self.blue_stick]
-        self.drums = tools.Drums()
+    def __init__(self) -> None:
+        self.red_stick: tools.Stick = tools.Stick("red")
+        self.blue_stick: tools.Stick = tools.Stick("blue")
+        self.sticks: List[tools.Stick] = [self.red_stick, self.blue_stick]
+        self.drums: tools.Drums = tools.Drums()
 
         pygame.mixer.pre_init()
         pygame.mixer.init(frequency=22050, size=-16, channels=2, buffer=4096)
 
-        self.snare = pygame.mixer.Sound("data/audio/snare.wav")
-        self.tom1 = pygame.mixer.Sound("data/audio/tom1.wav")
-        self.tom2 = pygame.mixer.Sound("data/audio/tom2.wav")
-        self.hihat = pygame.mixer.Sound("data/audio/hihat.wav")
+        self.snare: pygame.mixer.Sound = pygame.mixer.Sound("data/audio/snare.wav")
+        self.tom1: pygame.mixer.Sound = pygame.mixer.Sound("data/audio/tom1.wav")
+        self.tom2: pygame.mixer.Sound = pygame.mixer.Sound("data/audio/tom2.wav")
+        self.hihat: pygame.mixer.Sound = pygame.mixer.Sound("data/audio/hihat.wav")
 
     def run(self) -> None:
         """Run the main application loop."""
@@ -41,7 +42,9 @@ class App:
 
             if frame_time in tabs.keys() and frame_time not in offsets_done:
                 offsets_done.append(frame_time)
-                nb.append(visualization.note_box(tabs.get(frame_time)))
+                notes = tabs.get(frame_time)
+                if notes is not None:
+                    nb.append(visualization.note_box(notes))
 
             if nb:
                 for item in nb:
@@ -59,7 +62,7 @@ class App:
         camera.release()
         cv2.destroyAllWindows()
 
-    def process_frame(self, single_frame) -> None:
+    def process_frame(self, single_frame: np.ndarray) -> None:
         """Process a single frame to detect drum sticks."""
         blurred = cv2.GaussianBlur(single_frame, (11, 11), 0)
         hsv = cv2.cvtColor(blurred, cv2.COLOR_BGR2HSV)
@@ -89,7 +92,7 @@ class App:
                         single_frame, (int(x), int(y)), int(radius), stick.rgb, 2
                     )
 
-    def recognize_ball(self, ball_center: tuple, drum_stick: tools.Stick) -> None:
+    def recognize_ball(self, ball_center: Tuple[int, int], drum_stick: tools.Stick) -> None:
         """Recognize the ball and play the corresponding drum sound."""
         volume = drum_stick.determine_volume()
         if 80 <= ball_center[0] <= 230 and 110 <= ball_center[1] <= 210:

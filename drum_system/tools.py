@@ -1,3 +1,4 @@
+from typing import Tuple
 import numpy as np
 import math
 import cv2 as cv
@@ -11,7 +12,7 @@ class Stick:
     RED_RGB = (0, 0, 255)
     BLUE_RGB = (255, 0, 0)
 
-    def __init__(self, color: str):
+    def __init__(self, color: str) -> None:
         """Initialize the Stick with a specific color."""
         self.color = color
         if color == "red":
@@ -40,7 +41,7 @@ class Stick:
         ) ** 2  # Fixed y component calculation
         self.velocity = round(math.sqrt(x + y))
 
-    def update_centers(self, center: tuple) -> None:
+    def update_centers(self, center: Tuple[int, int]) -> None:
         """Update the list of last 5 centers with a new center."""
         self.last_5_centers.pop(0)
         self.last_5_centers.append(center)
@@ -54,10 +55,10 @@ class Stick:
 class Drums:
     """Class representing the drum set with drawable areas."""
 
-    def __init__(self):
+    def __init__(self) -> None:
         pass
 
-    def draw_drum_areas(self, mat) -> None:
+    def draw_drum_areas(self, mat: np.ndarray) -> None:
         """Draw the drum areas on the given matrix."""
         cv.rectangle(mat, (50, 350), (200, 450), (88, 138, 122), 1)
         cv.rectangle(mat, (430, 350), (580, 450), (185, 122, 53), 1)
